@@ -13,14 +13,14 @@ const (
 	EOF = "EOF"
 
 	// 識別子 + リテラル
-	IDENT = "IDENT" 
-	DIGITS   = "DIGITS"   // 1234567890
+	IDENT  = "IDENT"
+	DIGITS = "DIGITS" // 1234567890
 
 	TRUE  = "TRUE"
 	FALSE = "FALSE"
 	NULL  = "NULL"
 
-	PLUS = "+"
+	PLUS  = "+"
 	MINUS = "-"
 
 	// デリミタ
@@ -36,12 +36,12 @@ const (
 )
 
 var keywords = map[string]TokenType{
-	"true":   TRUE,
-	"false":  FALSE,
-	"null": NULL,
+	"true":  TRUE,
+	"false": FALSE,
+	"null":  NULL,
 }
 
-// LookupIdent 
+// LookupIdent
 func LookupIdent(ident string) TokenType {
 	if tok, ok := keywords[ident]; ok {
 		return tok

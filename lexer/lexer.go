@@ -1,8 +1,8 @@
 package lexer
 
 import (
-	"jsonParser/token"
 	"fmt"
+	"jsonParser/token"
 )
 
 type Lexer struct {
@@ -41,22 +41,22 @@ func (l *Lexer) NextToken() token.Token {
 	case '}':
 		tok = newToken(token.RBRACE, l.ch)
 	case ':':
-		tok = newToken(token.COLON,l.ch)
+		tok = newToken(token.COLON, l.ch)
 	case '"':
-		tok = newToken(token.DOUBLEQUOT,l.ch)
+		tok = newToken(token.DOUBLEQUOT, l.ch)
 	case ',':
-		tok = newToken(token.COMMA,l.ch)
+		tok = newToken(token.COMMA, l.ch)
 	case '.':
-		tok = newToken(token.PRIOD,l.ch)
+		tok = newToken(token.PRIOD, l.ch)
 	case '+':
-		tok = newToken(token.PLUS,l.ch)
+		tok = newToken(token.PLUS, l.ch)
 	case '-':
-		tok = newToken(token.MINUS,l.ch)
+		tok = newToken(token.MINUS, l.ch)
 	case '[':
-		tok = newToken(token.LBRACKET,l.ch)
+		tok = newToken(token.LBRACKET, l.ch)
 	case ']':
-		tok = newToken(token.RBRACKET,l.ch)
-	
+		tok = newToken(token.RBRACKET, l.ch)
+
 	case 0:
 		tok.Literal = ""
 		tok.Type = token.EOF
@@ -65,12 +65,12 @@ func (l *Lexer) NextToken() token.Token {
 		if isLetter(l.ch) {
 			tok.Literal = l.readIdentifier()
 			tok.Type = token.LookupIdent(tok.Literal)
-			fmt.Printf("%+v\n",tok)
+			fmt.Printf("%+v\n", tok)
 			return tok
 		} else if isDigit(l.ch) {
 			tok.Type = token.DIGITS
 			tok.Literal = l.readNumber()
-			fmt.Printf("%+v\n",tok)
+			fmt.Printf("%+v\n", tok)
 			return tok
 		}
 	}
@@ -109,7 +109,7 @@ func (l *Lexer) readIdentifier() string {
 }
 
 // readNumber 連続する数字を特定し,実数か整数かの判断を行い連続した数字とトークンタイプとして返す
-func (l *Lexer) readNumber() (string) {
+func (l *Lexer) readNumber() string {
 	position := l.position
 	for isDigit(l.ch) {
 		l.readChar()
@@ -120,7 +120,7 @@ func (l *Lexer) readNumber() (string) {
 // newToken 新しいtokenを生成する
 func newToken(tokenType token.TokenType, ch byte) token.Token {
 	newTK := token.Token{Type: tokenType, Literal: string(ch)}
-	fmt.Printf("%+v\n",newTK)
+	fmt.Printf("%+v\n", newTK)
 	return newTK
 }
 

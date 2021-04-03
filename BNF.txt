@@ -6,15 +6,15 @@
 
 <WS> ::= "" | '0020' <WS> |'000A' <WS> | '000D' <WS> | '0009' <WS>
 
-<OBJECT> ::= '{' <WS> '}' | '{' <MUMBERS> '}'
+<OBJECT> ::= '{' <WS> '}' | '{' <MEMBERS> '}'
 
-<ARRAY> ::= '[' <WS> ']' | '[' <EMELEMTS> ']'
+<ARRAY> ::= '[' <WS> ']' | '[' <ELEMENTS> ']'
 
 <STRING> ::= '"' <CHARACTERS> '"'
 
 <NUMBER> ::= <INTEGER> <FRACTION> <EXPONENT>
 
-<MUMBERS> ::= <MEMBER> | <MEMBER> ',' <MEMBERS>
+<MEMBERS> ::= <MEMBER> | <MEMBER> ',' <MEMBERS>
 
 <ELEMENTS> ::=  <ELEMENT> | <ELEMENT> ',' <ELEMENTS>
 
