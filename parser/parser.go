@@ -212,7 +212,7 @@ func (p *Parser) ParseArray() *ast.ArrayValue {
 	}
 
 	av.Elements = elements
-	fmt.Printf("%+v in ParseArray after \n", p)
+	// fmt.Printf("%+v in ParseArray after \n", p)
 	return av
 
 }
