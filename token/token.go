@@ -11,6 +11,7 @@ const (
 	ILLEGAL = "ILLEGAL"
 
 	EOF = "EOF"
+	WS  = "WHITESPACE"
 
 	// 識別子 + リテラル
 	IDENT  = "IDENT"

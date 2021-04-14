@@ -14,11 +14,12 @@ func main() {
 
 	l := lexer.New(input)
 	p := parser.New(l)
-	_ = p.ParseJson()
+	program := p.ParseJson()
 
 	if len(p.Errors()) != 0 {
 		fmt.Println("Error", p.Errors())
 	} else {
+		fmt.Println(program.String())
 		fmt.Println("OK")
 	}
 }

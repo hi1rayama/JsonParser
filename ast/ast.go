@@ -3,7 +3,9 @@ package ast
 import (
 	"bytes"
 	"jsonParser/token"
+	"strconv"
 )
+var space = ""
 
 type Node interface {
 	TokenLiteral() string
@@ -17,6 +19,10 @@ type Value interface {
 
 type Json struct {
 	Element Element
+}
+
+func (j *Json) String() string {
+	return j.Element.String()
 }
 
 type Element struct {
@@ -33,6 +39,33 @@ func (e *Element) String() string {
 	return ""
 }
 
+// ArrayValue 配列を表す構造体
+// <ARRAY> ::= '[' <WS> ']' | '[' <ELEMENTS> ']'
+type ArrayValue struct {
+	Token token.Token // "["トークン
+	Elements []Element
+}
+func (av *ArrayValue) valueNode() {}
+func (av *ArrayValue) TokenLiteral() string {return av.Token.Literal}
+func (av *ArrayValue) String() string {
+	var out bytes.Buffer
+
+	out.WriteString("[\n")
+	tmp := space
+	space = space + "  "
+	length := len(av.Elements)
+	for i,el := range av.Elements {
+		out.WriteString(space + el.String())
+		if length != i + 1 {
+			out.WriteString(",\n")
+		}
+	}
+	space = tmp
+	out.WriteString("\n"+space+"]")
+
+	return out.String()
+}
+
 // Object JSONのオブジェクトを表す構造体
 // <OBJECT> ::= '{' <WS> '}' | '{' <MUMBERS> '}'
 type ObjectValue struct {
@@ -45,12 +78,19 @@ func (ov *ObjectValue) TokenLiteral() string { return ov.Token.Literal }
 func (ov *ObjectValue) String() string {
 	var out bytes.Buffer
 
-	out.WriteString("{")
-
-	for _, s := range ov.Members {
-		out.WriteString(s.String())
+	out.WriteString("{\n")
+	length := len(ov.Members)
+	tmp := space
+	space = space + "  "
+	for i, s := range ov.Members {
+		out.WriteString(space + s.String())
+		if length != i + 1{
+			out.WriteString(",")
+		}
+		out.WriteString("\n")
 	}
-	out.WriteString("}")
+	space = tmp
+	out.WriteString(space + "}")
 
 	return out.String()
 
@@ -60,6 +100,7 @@ func (ov *ObjectValue) String() string {
 // <MEMBER> ::= <WS> <STRING> <WS> ':' <ELEMENT>
 type Member struct {
 	Token   token.Token // 識別子(key)トークン
+	Key     Value       // StringValue
 	Element Element
 }
 
@@ -67,7 +108,7 @@ func (m *Member) valueNode()           {}
 func (m *Member) TokenLiteral() string { return m.Token.Literal }
 func (m *Member) String() string {
 	var out bytes.Buffer
-	out.WriteString(m.Token.Literal)
+	out.WriteString(m.Key.String())
 	out.WriteString(":")
 	out.WriteString(m.Element.String())
 
@@ -84,7 +125,7 @@ type NumberValue struct {
 func (nv *NumberValue) valueNode()           {}
 func (nv *NumberValue) TokenLiteral() string { return nv.Token.Literal }
 func (nv *NumberValue) String() string {
-	return nv.Token.Literal
+	return strconv.FormatInt(nv.Value, 10)
 }
 
 // StringValue 文字列リテラルを表す構造体
@@ -96,7 +137,7 @@ type StringValue struct {
 func (sv *StringValue) valueNode()           {}
 func (sv *StringValue) TokenLiteral() string { return sv.Token.Literal }
 func (sv *StringValue) String() string {
-	return sv.Token.Literal
+	return `"` + sv.Token.Literal + `"`
 }
 
 type BooleanValue struct {
