@@ -20,7 +20,6 @@ func main() {
 		fmt.Println("Error", p.Errors())
 	} else {
 		fmt.Println(program.String())
-		fmt.Println("OK")
 	}
 }
 

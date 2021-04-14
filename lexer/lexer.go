@@ -65,12 +65,12 @@ func (l *Lexer) NextToken() token.Token {
 		if isLetter(l.ch) {
 			tok.Literal = l.readIdentifier()
 			tok.Type = token.LookupIdent(tok.Literal)
-			fmt.Printf("%+v\n", tok)
+			// fmt.Printf("%+v\n", tok)
 			return tok
 		} else if isDigit(l.ch) {
 			tok.Type = token.DIGITS
 			tok.Literal = l.readNumber()
-			fmt.Printf("%+v\n", tok)
+			// fmt.Printf("%+v\n", tok)
 			return tok
 		}
 	}
@@ -120,7 +120,7 @@ func (l *Lexer) readNumber() string {
 // newToken 新しいtokenを生成する
 func newToken(tokenType token.TokenType, ch byte) token.Token {
 	newTK := token.Token{Type: tokenType, Literal: string(ch)}
-	fmt.Printf("%+v\n", newTK)
+	// fmt.Printf("%+v\n", newTK)
 	return newTK
 }
 

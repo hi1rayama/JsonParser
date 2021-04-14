@@ -29,7 +29,7 @@ func New(l *lexer.Lexer) *Parser {
 
 	p.nextToken()
 	p.nextToken()
-	fmt.Printf("%+v in New \n", p)
+	// fmt.Printf("%+v in New \n", p)
 	return p
 }
 
@@ -56,8 +56,8 @@ func (p *Parser) ParseJson() *ast.Json {
 	// ASTのルートノードを生成
 	json := &ast.Json{}
 	json.Element.Value = p.ParseValue()
-	fmt.Printf("%+v in ParseProgram \n", *json)
-	fmt.Printf("%+v in ParseProgram \n", p)
+	// fmt.Printf("%+v in ParseProgram \n", *json)
+	// fmt.Printf("%+v in ParseProgram \n", p)
 
 	// 正しく終了したかを確認する
 	if p.curToken.Type != token.EOF {
@@ -70,7 +70,7 @@ func (p *Parser) ParseJson() *ast.Json {
 
 func (p *Parser) ParseValue() ast.Value {
 	var value ast.Value
-	fmt.Printf("%+v in ParseVale before \n", p)
+	// fmt.Printf("%+v in ParseVale before \n", p)
 	switch p.curToken.Type {
 	case token.DOUBLEQUOT:
 		value = p.ParseString()
@@ -95,13 +95,12 @@ func (p *Parser) ParseValue() ast.Value {
 		// 配列
 		value = p.ParseArray()
 	default:
-		fmt.Println("mll")
 		value = nil
 
 	}
 	// トークンの更新
 	p.nextToken()
-	fmt.Printf("%+v in ParseVale after \n", p)
+	// fmt.Printf("%+v in ParseVale after \n", p)
 
 	return value
 
@@ -172,23 +171,22 @@ func (p *Parser) ParseObject() *ast.ObjectValue {
 			return nil
 		}
 		members = append(members, *member)
-		fmt.Printf("%+vmember after\n",p)
+		// fmt.Printf("%+vmember after\n",p)
 		if p.curToken.Type != token.COMMA{
 			break
 		}
 		p.nextToken()
 	}
-	// p.nextToken()
-	fmt.Printf("%+v parseMember after\n",p)
+	// fmt.Printf("%+v parseMember after\n",p)
 	return &ast.ObjectValue{Token: token.Token{token.LBRACE, "{"}, Members: members}
 }
 
 // ParseArray 配列の構文解析を行う
 func (p *Parser) ParseArray() *ast.ArrayValue {
-	fmt.Printf("%+v in ParseArray before \n", p)
+	// fmt.Printf("%+v in ParseArray before \n", p)
 	// '[' <WS> ']' の場合
 	if p.expectPeek(token.RBRACKET, false) {
-		fmt.Printf("%+v in ParseArray after WS \n", p)
+		// fmt.Printf("%+v in ParseArray after WS \n", p)
 		return &ast.ArrayValue{Token: token.Token{token.WS, ""}, Elements: []ast.Element{}}
 	}
 
@@ -229,7 +227,7 @@ func (p *Parser) ParseMember() *ast.Member {
 	// <WS> <STRING> <WS> ':' <ELEMENT> ; <WS>は字句解析の時点で除外されている
 
 	// Key(<STRING>)部分の構文解析
-	fmt.Printf("%+v ParseMember Start\n",p)
+	// fmt.Printf("%+v ParseMember Start\n",p)
 	if p.curToken.Type != token.DOUBLEQUOT {
 		msg := fmt.Sprintf("構文エラー 文字列は,「\"」で囲んでください2")
 		p.errors = append(p.errors, msg)
@@ -248,13 +246,10 @@ func (p *Parser) ParseMember() *ast.Member {
 	if !p.expectPeek(token.COLON, true) {
 		return nil
 	}
-	fmt.Printf("%+v156\n",p)
 	p.nextToken()
 	// Value<ELEMENT>部分の構文解析 <<<<<<- この箇所は再帰的な処理
 	val := p.ParseValue()
-	fmt.Printf("%+v val\n",val)
 	member.Element.Value = val
-	fmt.Printf("member %+v \n", *member)
 	return member
 }
 
