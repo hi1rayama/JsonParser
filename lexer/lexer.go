@@ -1,7 +1,6 @@
 package lexer
 
 import (
-	"fmt"
 	"jsonParser/token"
 )
 

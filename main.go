@@ -3,14 +3,22 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
-	// "os"
+	"os"
 	"jsonParser/lexer"
 	"jsonParser/parser"
+	"flag"
 )
 
 func main() {
+	// コマンドライン引数のチェック
+	flag.Parse()
+	args := flag.Args()
+	if len(args) < 1 {
+		fmt.Println("usage : go run main.go filename")
+		os.Exit(1)
+	}
 	// ファイル読み込み
-	input := useIoutilReadFile("test.json")
+	input := useIoutilReadFile(args[0])
 
 	l := lexer.New(input)
 	p := parser.New(l)
